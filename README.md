@@ -164,4 +164,8 @@ Com base nessas constatações, temos 3 frentes que podem ser tomadas:
 1. Pagamento: Atualizar as formas de pagamento para as mais atuais e descontinuar a modalidade de cheque.
 1. Produtos: Estudar a qualidade do produto de fibra ótica
 
-A principio, com base nessas pontos, a solução está dentro de casa. Não dá, até o momento, para constatar que um determinado perfil de cliente é propenso ao churn
+A principio, com base nessas pontos, a solução está dentro de casa. Não dá, até o momento, para constatar que um determinado perfil de cliente é propenso ao churn.
+
+#### To-do list
+- [ ] Trazer ao README.md mais gráficos
+- [ ] Melhorar a qualidade dos gráficos (título, borda, eixo, etc)
