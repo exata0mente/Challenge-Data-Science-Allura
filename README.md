@@ -103,7 +103,7 @@ Após a normalização a base de dados possui 7267 linhas e 22 colunas.
 
 Os resultados dos tratamentos podem ser encontrados na pasta de [Dados](Dados/), contendo duas bases, [com](Dados/dados_tratados_sem_traducao.json) e [sem tradução](Dados/dados_tratados.json)
 
-Todo o desenvolvimento realizado pode ser encontrado no notebook [Base de Dados - Churn.ipynb](./Semana 1/Base de Dados - Churn.ipynb)
+Todo o desenvolvimento realizado pode ser encontrado no notebook [Base de Dados - Churn.ipynb](./Semana_1/Base de Dados - Churn.ipynb)
 
 #### Conclusão
 
@@ -128,9 +128,9 @@ Nesta etapa dei visualização principalmente as distrubuições de frequência 
 
 #### Resultados
 
-Dentre as várias análises realizadas, que podem ser encontradas [aqui](./Semana 2/), atráves da Matriz de Correlação, identificamos 4 variávies que apresentaram uma correlação considerável:
+Dentre as várias análises realizadas, que podem ser encontradas [aqui](./Semana_2/), atráves da Matriz de Correlação, identificamos 4 variávies que apresentaram uma correlação considerável:
 
-![matriz correlação](Semana 2/matriz_correlacao.png)
+![matriz correlação](Semana_2/matriz_correlacao.png)
 
 ##### Tipo de contrato: mensal
 
@@ -152,8 +152,8 @@ Imagino ser potencialmente problematica essa forma de pagamento, a sugestão ser
 
 É possível identificar uma maior distribuição nos clientes _churn_ principalmente em contratos de poucos meses
 
-![meses_contrato em relação ao churn1](Semana 2/meses_contratos_churn01.png)
-![meses_contrato em relação ao churn2](Semana 2/meses_contratos_churn02.png)
+![meses_contrato em relação ao churn1](Semana_2/meses_contratos_churn01.png)
+![meses_contrato em relação ao churn2](Semana_2/meses_contratos_churn02.png)
 
 A correlação é negativa, o que faz sentido se analisarmos a relação com o tipo de contrato mensal.
 
