@@ -18,10 +18,11 @@ Assim, você solicita o conjunto de dados para começar a explorar, tratar e mod
 Por fim, você vai utilizar o **GitHub** e desenvolverá um **portfólio** focado em Data Science e Machine Learning.
 
 O desafio será divido em 4 partes (semanas):
-1. Análise exploratória dos dados
-1. Visualização dos dados
-1. Modelagem de *Machine Learning*
-1. Apresentação e portifólio
+
+1. [**Análise exploratória dos dados**](#parte-1-análise-exploratória-dos-dados)
+1. [**Visualização dos dados**](#parte-2-visualização-dos-dados)
+1. **Modelagem de _Machine Learning_**
+1. **Apresentação e portifólio**
 
 Abaixo destaco os pontos importantes de cada uma das etapas.
 
@@ -39,6 +40,10 @@ A base disponibilizada contem dados dos clientes da Alura Voz, como ja citado, c
 - **Conta**: Tipo do contrato, metodo de pagamento e valores
 
 O dicionário de dados está localizado em https://github.com/sthemonica/alura-voz/blob/main/dicionario.md
+
+#### Ferramentas utilizadas
+- `pandas` 
+- `numpy`
 
 #### O desenvolvimento
 
@@ -92,15 +97,13 @@ Para
 
 Em seguida realizamos a tradução das colunas, para uma menor carga cognitiva na interpretação das colunas e depois alguns tratamentos necessários, sendo eles limpeza de dados faltantes, entendimento de algumas distribuições e correção de alguns valores.
 
-Para essa etapa foram utilizadas os pacotes `pandas` e `numpy`.
-
 Após a normalização a base de dados possui 7267 linhas e 22 colunas.
 
 #### Resultados
 
 Os resultados dos tratamentos podem ser encontrados na pasta de [Dados](Dados/), contendo duas bases, [com](Dados/dados_tratados_sem_traducao.json) e [sem tradução](Dados/dados_tratados.json)
 
-Todo o desenvolvimento realizado pode ser encontrado no notebook [Base de Dados - Churn.ipynb](Semana 1/Base de Dados - Churn.ipynb)
+Todo o desenvolvimento realizado pode ser encontrado no notebook [Base de Dados - Churn.ipynb](./Semana 1/Base de Dados - Churn.ipynb)
 
 #### Conclusão
 
@@ -108,3 +111,57 @@ Pude concluir nesta etapa a importância da organização dos dados, a análise 
 
 #### To-do list
 - [ ] Trazer ao README.md alguns números e visuais da base tratada.
+
+### Parte 2: Visualização dos dados
+
+Com os dados devidamente tratados, vamos fazer uma análise visual e trazer algumas hipóteses referente ao _churn_
+
+#### Ferramentas utilizadas
+
+- `pandas` 
+- `seaborn`
+- `matplotlib.pyplot`
+
+#### O desenvolvimento
+
+Nesta etapa dei visualização principalmente as distrubuições de frequência das variáveis. Primeiramente entre elas e em seguida em relação ao churn. Lembrando que na base possuia [diversas informações](#a-base-de-dados) sobre o cadastro do cliente na **Alura Voz**, dando a possibilidade de realizar as relações com a variável em questão.
+
+#### Resultados
+
+Dentre as várias análises realizadas, que podem ser encontradas [aqui](./Semana 2/), atráves da Matriz de Correlação, identificamos 4 variávies que apresentaram uma correlação considerável:
+
+![matriz correlação](Semana 2/matriz_correlacao.png)
+
+##### Tipo de contrato: mensal
+
+A variável referente a contrato mensal indicou uma correlação com a variável de churn. Lembrando que para tipo de contrato temos as opções de Mensal, Anual e Bienal.
+
+Nossos clientes com **contratos curtos estão mais propensos ao churn**. Esta opção de contrato pode ser tirada do portifólio ou devemos melhorar as condições?
+
+##### Tipo de internet: produto Fibra Ótica
+
+A variável de produto Fibra Ótica também indicou propenção ao churn. Importante notar que esse produto tem correlação positiva com as variáveis de valores pagos. Ou seja, é um produto caro que o cliente não está conseguindo pagar ou o produto não está se justificando
+
+##### Tipo de pagamento: cheque eletrônico
+
+Este tipo de pagamento, que tem uma correlação forte com o produto fibra ótica.
+
+Imagino ser potencialmente problematica essa forma de pagamento, a sugestão seria descontinuá-la.
+
+##### Meses de contrato
+
+É possível identificar uma maior distribuição nos clientes _churn_ principalmente em contratos de poucos meses
+
+![meses_contrato em relação ao churn1](Semana 2/meses_contratos_churn01.png)
+![meses_contrato em relação ao churn2](Semana 2/meses_contratos_churn02.png)
+
+A correlação é negativa, o que faz sentido se analisarmos a relação com o tipo de contrato mensal.
+
+#### Conclusão
+
+Com base nessas constatações, temos 3 frentes que podem ser tomadas:
+1. Contrato: Revisão dos termos, preços e multas
+1. Pagamento: Atualizar as formas de pagamento para as mais atuais e descontinuar a modalidade de cheque.
+1. Produtos: Estudar a qualidade do produto de fibra ótica
+
+A principio, com base nessas pontos, a solução está dentro de casa. Não dá, até o momento, para constatar que um determinado perfil de cliente é propenso ao churn
