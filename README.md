@@ -169,3 +169,94 @@ A principio, com base nessas pontos, a solução está dentro de casa. Não dá,
 #### To-do list
 - [ ] Trazer ao README.md mais gráficos
 - [ ] Melhorar a qualidade dos gráficos (título, borda, eixo, etc)
+
+### Parte 3: Modelo de Machine Learning
+
+Nesta etapa, tendo a base devidamente tratada, iremos iniciar a nossa identificação de um modelo para a predição de churn
+
+#### Ferramentas utilizadas
+
+- `imblearn.over_sampling`: Para o balanceamento dos dados
+- `sklearn.model_selection`: Para a separação de amostras de treino e teste
+- `sklearn.linear_model`: Para a utilização do modelo `LogisticRegression` (regressão logística)
+- `sklearn.tree`: Para a utilização do modelo `DecisionTreeClassifier` (árvore de decisão)
+- `sklearn.ensemble`: Para a utilização do modelo `RandomForestClassifier` (árvores randomicas)
+- `sklearn.dummy`: Para a utilização do modelo `DummyClassifier` (_baseline_)
+- `sklearn.linear_model`: Para a utilização do modelo `LogisticRegression` (regressão logística)
+
+#### Pré-processamento
+
+Entendedo o modelo de atuação da empresa, analisando alguns dados de nossa base e com a [conclusão](#conclusão-1) da etapa anterior, entendo que algumas _features_ podem ser desconsideradas da nossa definição de modelo de machine learning. São elas:
+
+- Sexo: não há indicação de que o sexo de um cliente defina se ele irá sair ou não da empresa. (O produto não é nichado, a correlação é baixa)
+- Valor serviço diário: É redundante ao valor serviço mensal
+
+Afim de evitar alguns vieses nos modelos que serão utilizados, iremos primeiramente balancear os dados. Isso significa que iremos deixar proporcional os resultados de churn.
+
+A base possui a distribuição desbalanceada conforme figura abaixo:
+
+![meses_contrato em relação ao churn1](Semana_3/distribuicao_churn_base.png)
+
+Tendo apenas 27% da base com a classe _target_ (churn = 'Sim') precisamos balancear a base para que nosso modelo tenha amostras devidamente proporcionais em seu treinamento.
+
+Para tal, iremos utilizar a técnica SMOTE (_Synthetic Minority Oversampling Technique_). Basicamente, esta técnica cria dados sintéticos similares aos já existentes, utilizando o algoritimo KNN. Abaixo uma ilustração de como funciona essa sintetização:
+
+![smote_visual](Semana_3/visual_smote_knn.png) [^1]
+
+#### Modelos
+
+Optamos pela utilização de 4 modelos:
+
+1. Regressão Logística
+1. Árvore de Decisão
+1. Árvore Randomica
+1. Máquinas Vetores de Suporte (SVM)
+
+O motivo da escolha desses modelos é que eles foram abordados nas trilhas sugeridas no Challenge. A medida que eu for aprofundando o conhecimento irei aproveitar este trabalho e enriquecê-lo.
+
+#### Métricas
+
+Abaixo as definições de algumas métricas utilizadas no avaliação do modelo[^2]: 
+
+* **Acurácia/Accuracy**: avalia a proporção de acertos em relação a todas as previsões realizadas. É obtida somando a diagonal principal da matriz e dividindo pela soma de todos os valores.
+* **Sensibilidade/Revocação/Recall**: avalia a proporção de verdadeiros positivos dentre todos os valores positivos reais. É obtida dividindo os verdadeiros positivos pela soma de positivos reais.
+* **Precisão/Precision**: avalia a proporção de verdadeiros positivos dentre as predições dadas como positivas pelo modelo. É obtida dividindo os verdadeiros positivos pela soma das previsões positivas.
+* **F1 Score**: é o equilíbrio entre a sensibilidade e a precisão, sendo a média harmônica entre as duas métricas. 
+
+> Desta forma, a métrica F-1 tende a avaliar melhor os modelos de classificação que apresentam bons valores de precisão e sensitividade, isto é, não apenas tendem a classificar corretamente as amostras de uma determinada classe, como também faz poucos erros para as demais classes [^1]
+
+
+#### Resultados
+
+Em uma primeira execução tivemos o seguinte resultado
+
+|    **classificador**   | **acuracia** | **precisao** | **recall** |  **f1**  |  **auc** |
+|:----------------------:|:------------:|:------------:|:----------:|:--------:|:--------:|
+| LogisticRegression     | 0.836877     | 0.837945     | 0.830070   | 0.833989 | 0.925635 |
+| DecisionTreeClassifier | 0.802474     | 0.773181     | 0.848865   | 0.809257 | 0.877435 |
+| RandomForestClassifier | 0.815617     | 0.782087     | 0.868442   | 0.823006 | 0.887952 |
+| SVC                    | 0.664863     | 0.676117     | 0.616288   | 0.644818 | 0.744154 |
+
+O modelo de Regressão Logística está apresentando um melhor resultado geral, tendo oportunidade de melhorias justamente na métrica de _recall_. Levarei esse modelo para a etapa de melhoria
+
+#### Melhoria do modelo
+
+Apesar de tentar algumas vezes, eu não consegui melhorar o modelo de regressão logística (vou me aprofundar e entender melhor os hiperparâmetros deste modelo).
+
+Sendo assim, partirei para o RandomForestClassifier que apresentou também bons resultados.
+
+#### Testando o modelo 
+
+No conjunto de dados inicial haviam _n_ registros com a variavel _churn_ marcado como nulo. Vamos aplicar este conjunto no modelo e verificar qual seriam as suas classificações
+
+
+#### To-do list
+- [X] Adicionar as métricas ROC na avaliação dos modelos
+- [X] Aplicar modelo SVM
+
+
+
+## Referências
+
+[^1]: SCHUBACH, M.; RE, M.; ROBINSON, P.; VALENTINI, G. Imbalance-aware machine learning for predicting rare and common disease-associated non-coding vari-ants. Scientific Reports, 7, 2017
+[^2]: https://cursos.alura.com.br/course/modelos-preditivos-dados-deteccao-fraude/task/106629
