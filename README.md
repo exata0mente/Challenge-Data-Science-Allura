@@ -1,6 +1,15 @@
 ![Status](https://img.shields.io/badge/status-Em%20desenvolvimento-green?style=plastic)
 [![Commits semanais](https://img.shields.io/github/commit-activity/w/exata0mente/Challenge-Data-Science-Allura?style=plastic)](https://github.com/exata0mente/Challenge-Data-Science-Allura/pulse)
 
+# TL;DR
+
+Com base nos dados de uma empresa de voz fictícia, **Alura Voz**, realizei um _pipeline_ de modelagem de machine learning, proposto no [Challenge de DataScience da Alura](https://www.alura.com.br/challenges/data-science) para identificar um cliente que potencialmente deixará de usar esse serviço.
+
+Trabalhando com uma base de 7267 linhas e 22 colunas, bibliotecas como `pandas`, `seaborn`, `scikitlearning` e elementos de _storytelling_, identifiquei inicialmente que as **características de clientes que sairám da empresa** estavam mais concentradas no **tipo e tempo de contrato, serviço de fibra ótica e pagamento com cheque eletrônico**.
+
+O modelo selecionado para predição foi o de algoritimo *Random Forrest*, que apresentou métricas de 75% de acurácia e 93% de sensibilidade no treinamento porém, quando utilizado em uma pequena base separada de 224 registros, apresentou uma generalização em um atributo específico (tipo de contrato) mostrando ainda a oportunidade de melhoria no modelo.
+ 
+
 # Challenge: Data Science Allura
 
 Neste repositório postarei o meu progresso no [Challenge de DataScience da Alura](https://www.alura.com.br/challenges/data-science)
@@ -21,7 +30,7 @@ O desafio será divido em 4 partes (semanas):
 
 1. [**Análise exploratória dos dados**](#parte-1-análise-exploratória-dos-dados)
 1. [**Visualização dos dados**](#parte-2-visualização-dos-dados)
-1. **Modelagem de _Machine Learning_**
+1. [**Modelagem de _Machine Learning_**](#parte-3-modelo-de-machine-learning)
 1. **Apresentação e portifólio**
 
 Abaixo destaco os pontos importantes de cada uma das etapas.
@@ -191,7 +200,7 @@ Entendedo o modelo de atuação da empresa, analisando alguns dados de nossa bas
 - Sexo: não há indicação de que o sexo de um cliente defina se ele irá sair ou não da empresa. (O produto não é nichado, a correlação é baixa)
 - Valor serviço diário: É redundante ao valor serviço mensal
 
-Afim de evitar alguns vieses nos modelos que serão utilizados, iremos primeiramente balancear os dados. Isso significa que iremos deixar proporcional os resultados de churn.
+Afim de evitar alguns vieses nos modelos que serão utilizados, iremos primeiramente balancear os dados. Isso significa que iremos deixar proporcional os resultados de churn. 
 
 A base possui a distribuição desbalanceada conforme figura abaixo:
 
@@ -223,16 +232,15 @@ Abaixo as definições de algumas métricas utilizadas no avaliação do modelo[
 * **Precisão/Precision**: avalia a proporção de verdadeiros positivos dentre as predições dadas como positivas pelo modelo. É obtida dividindo os verdadeiros positivos pela soma das previsões positivas.
 * **F1 Score**: é o equilíbrio entre a sensibilidade e a precisão, sendo a média harmônica entre as duas métricas. 
 
-> Desta forma, a métrica F-1 tende a avaliar melhor os modelos de classificação que apresentam bons valores de precisão e sensitividade, isto é, não apenas tendem a classificar corretamente as amostras de uma determinada classe, como também faz poucos erros para as demais classes [^1]
 
 
 #### Resultados
 
 Em uma primeira execução tivemos o seguinte resultado
 
-|    **classificador**   | **acuracia** | **precisao** | **recall** |  **f1**  |  **auc** |
+|    classificador   | acuracia | precisao | recall |  f1  |  auc |
 |:----------------------:|:------------:|:------------:|:----------:|:--------:|:--------:|
-| LogisticRegression     | 0.836877     | 0.837945     | 0.830070   | 0.833989 | 0.925635 |
+| **LogisticRegression**     | **0.836877**     | **0.837945**     | **0.830070**   | **0.833989** | **0.925635** |
 | DecisionTreeClassifier | 0.802474     | 0.773181     | 0.848865   | 0.809257 | 0.877435 |
 | RandomForestClassifier | 0.815617     | 0.782087     | 0.868442   | 0.823006 | 0.887952 |
 | SVC                    | 0.664863     | 0.676117     | 0.616288   | 0.644818 | 0.744154 |
@@ -245,18 +253,61 @@ Apesar de tentar algumas vezes, eu não consegui melhorar o modelo de regressão
 
 Sendo assim, partirei para o RandomForestClassifier que apresentou também bons resultados.
 
+|              classificador |    acuracia |     precisao |       recall |          f1 |          auc |
+|---------------------------:|------------:|-------------:|-------------:|------------:|-------------:|
+| RandomForestClassifier     | 0.81407     | 0.779102     | 0.870008     | 0.82205     | 0.884849     |
+| **RandomForestClassifier** | **0.75029** | **0.679567** | **0.935004** | **0.78708** | **0.816220** |
+
+Apesar de as métricas terem **apenas** melhorado na acurácia proposta (recall), vejo que o modelo está aceitável pois teve uma melhora na definição dos **Verdadeiros Positivos** (marcação de churn em quem é churn), uma grande melhora (100% relativamente) na identificação dos **Falso Negativo** (marcação de não churn em quem é churn), uma queda no **Falso Positivo** mas que na verdade se desloca para o **Falso Negativo**.
+
+*Matriz confusão antes*
+
+![matriz confusão antes](Semana_3/matriz_confusao_rf_antes.png)
+
+*Matriz confusão depois*
+
+![matriz confusão depois](Semana_3/matriz_confusao_rf_depois.png)
+
+Inicialmente não vejo esse deslocamento ruim ao processo. Significa que, ao invés de cravar que o cliente não será churn eu vou dizer que ele será (mesmo não sendo). 
+
 #### Testando o modelo 
 
-No conjunto de dados inicial haviam _n_ registros com a variavel _churn_ marcado como nulo. Vamos aplicar este conjunto no modelo e verificar qual seriam as suas classificações
+No conjunto de dados inicial haviam 224 registros com a variavel _churn_ marcado como nulo. Vamos aplicar este conjunto no modelo e verificar qual seriam as suas classificações.
+
+Temos então: 
+
+![teste modelo churn](Semana_3/distribuicao_churn_modelo.png)
+
+58% desta base está classificada como churn.
+
+Avaliando as hipótises levantadas vemos que o modelo classificou como churn:
+
+1. 100% dos clientes que tinham contrato na modalidade mensal
+1. 55% dos clientes que tinham o produto fibra ótica
+1. 50% dos clientes que tinham a modalidade de pagamento como cheque eletrônico.
+
+##### Conclusão
+
+O modelo quando testado sob uma potencial base de clientes, que não tenha sido nem a de treino nem a de teste, **não apresentou um resultado satisfatório**.
+
+A generalização dos clientes com contrato mensal foi o resultado mais impactante nesta análise. O modelo pode ter sofrido um _overfit_ que o fez realizar essa marcação generalizada.
+
+Não é o pior mas peca pelo excesso.
 
 
 #### To-do list
 - [X] Adicionar as métricas ROC na avaliação dos modelos
 - [X] Aplicar modelo SVM
+- [ ] Validar o potencial overfit do modelo selecionado
 
+## Contatos
 
+<div>
+<a href="https://www.linkedin.com/in/rbezerraa/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>  
 
 ## Referências
 
 [^1]: SCHUBACH, M.; RE, M.; ROBINSON, P.; VALENTINI, G. Imbalance-aware machine learning for predicting rare and common disease-associated non-coding vari-ants. Scientific Reports, 7, 2017
 [^2]: https://cursos.alura.com.br/course/modelos-preditivos-dados-deteccao-fraude/task/106629
+[^3]: MAIONE, C. Balanceamento de dados com base em oversampling em dados transformados. 2020. 135 f. Tese (Doutorado em Ciência da Computação em Rede) - Universidade Federal de Goiás, Goiânia, 2020. http://repositorio.bc.ufg.br/tede/handle/tede/10943
+
